@@ -1,0 +1,48 @@
+<% layout('layout') -%>
+    <h2>
+        <%= contact ? 'Editar Contato' : 'Novo Contato' %>
+    </h2>
+    <form method="post" action="<%= contact ? '/contacts/' + contact.id : '/contacts' %>">
+        <div class="grid">
+            <label>Nome*
+                <input type="text" name="first_name" minlength="4" maxlength="256" required
+                    value="<%= contact?.first_name || '' %>" />
+            </label>
+            <label>Sobrenome*
+                <input type="text" name="last_name" minlength="4" maxlength="256" required
+                    value="<%= contact?.last_name || '' %>" />
+            </label>
+            <label>Data de Nascimento*
+                <input type="date" name="birth_date" required value="<%= contact?.birth_date || '' %>" />
+            </label>
+            <label>Sexo Biológico*
+                <select name="sex" required>
+                    <option value="">-- selecione --</option>
+                    <option value="Masculino" <%=contact?.sex==='Masculino' ? 'selected' : '' %>>Masculino</option>
+                    <option value="Feminino" <%=contact?.sex==='Feminino' ? 'selected' : '' %>>Feminino</option>
+                </select>
+            </label>
+            <label>E-mail (opcional)
+                <input type="email" name="email" value="<%= contact?.email || '' %>" />
+            </label>
+        </div>
+
+
+        <label>Observações (até 512)
+            <textarea name="notes" maxlength="512" rows="4"><%= contact?.notes || '' %></textarea>
+        </label>
+
+
+        <label>Redes Sociais / Links (um por linha)
+            <textarea name="links_multiline" rows="4"
+                placeholder="https://...\nhttps://..."><%= contact?.links_multiline || '' %></textarea>
+        </label>
+
+
+        <div class="actions">
+            <button class="btn" type="submit">
+                <%= contact ? 'Guardar' : 'Criar' %>
+            </button>
+            <a class="btn btn-outline" href="/">Cancelar</a>
+        </div>
+    </form>

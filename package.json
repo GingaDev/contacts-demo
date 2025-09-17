@@ -1,0 +1,21 @@
+{
+    "name": "contatos-sqlite-monolito",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Sistema monolítico Node.js com SQLite: auth + CRUD de contatos + like/dislike",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "better-sqlite3": "^9.4.0",
+        "ejs": "^3.1.10",
+        "express": "^4.19.2",
+        "express-session": "^1.17.3",
+        "method-override": "^3.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.0"
+    }
+}

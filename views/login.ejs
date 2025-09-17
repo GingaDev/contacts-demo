@@ -1,0 +1,14 @@
+<% layout('layout') -%>
+    <div class="card auth">
+        <h2>Entrar</h2>
+        <form method="post" action="/login">
+            <label>E-mail
+                <input type="email" name="email" required />
+            </label>
+            <label>Palavra‑passe
+                <input type="password" name="password" required />
+            </label>
+            <button class="btn" type="submit">Entrar</button>
+            <p class="muted">Ainda sem conta? <a href="/register">Registar</a></p>
+        </form>
+    </div>
