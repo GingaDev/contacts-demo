@@ -3,15 +3,12 @@ module.exports = {
   testEnvironment: 'node',
   reporters: [
     'default',
-    [
-      'jest-junit',
-      {
-        outputDirectory: './reports/junit',
-        outputName: 'jest-junit.xml',
-      },
-    ],
+    ['jest-junit', {
+      outputDirectory: './reports/junit',
+      outputName: 'jest-junit.xml',
+    }],
   ],
   collectCoverage: true,
   coverageDirectory: './reports/coverage',
-  coverageReporters: ['lcov', 'text', 'cobertura'],
+  coverageReporters: ['lcov','text','cobertura'],
 };
