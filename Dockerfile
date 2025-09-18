@@ -1,4 +1,4 @@
-FROM cgr.dev/chainguard/node:20.19.5-slim
+FROM cgr.dev/chainguard/node:latest
 
 # Criar diretório da aplicação
 WORKDIR /usr/src/app
@@ -25,4 +25,5 @@ ENV NODE_ENV=production
 ENV PORT=3000
 
 # Comando para iniciar a aplicação
-CMD ["npm", "start"]
+# O entrypoint da imagem base já é "node", então só precisamos passar o script.
+CMD ["server.js"]

@@ -562,10 +562,29 @@ app.post('/api/contacts/:id/dislike', requireAuth, (req, res) => {
 
 // Iniciar servidor
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
     console.log(`Acesse: http://localhost:${PORT}`);
   });
+
+  const gracefulShutdown = (signal) => {
+    console.log(`${signal} received. Shutting down gracefully...`);
+    server.close(() => {
+      console.log('HTTP server closed.');
+      db.close((err) => {
+        if (err) {
+          console.error('Error closing database:', err.message);
+        } else {
+          console.log('Database connection closed.');
+        }
+        process.exit(0);
+      });
+    });
+  };
+
+  // Listen for termination signals
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 }
 
 module.exports = app;
