@@ -93,7 +93,10 @@ app.get('/login', (req, res) => {
   if (req.session.userId) {
     return res.redirect('/');
   }
-  
+
+  const { loginError } = req.session;
+  delete req.session.loginError;
+
   res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
@@ -119,6 +122,7 @@ app.get('/login', (req, res) => {
                     <button type="submit" class="btn-primary">Entrar</button>
                 </form>
                 <div class="auth-info">
+                    ${loginError ? `<p class="auth-error">${loginError}</p>` : ''}
                     <p><strong>Usuário de teste:</strong></p>
                     <p>E-mail: admin@teste.com</p>
                     <p>Senha: 123456</p>
@@ -140,12 +144,8 @@ app.post('/login', (req, res) => {
     }
     
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      return res.send(`
-        <script>
-          alert('E-mail ou senha incorretos!');
-          window.location.href = '/login';
-        </script>
-      `);
+      req.session.loginError = 'E-mail ou senha incorretos!';
+      return res.redirect('/login');
     }
     
     req.session.userId = user.id;
@@ -569,4 +569,3 @@ if (require.main === module) {
 }
 
 module.exports = app;
-
