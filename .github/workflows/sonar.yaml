@@ -1,4 +1,4 @@
-Name: Run Unit Tests and SonarQube Scan
+name: Run Unit Tests and SonarQube Scan
 
 on: 
   pull_request:
