@@ -1,32 +1,49 @@
-name: Run Unit Tests and SonarQube Scan
+name: "Validate, Test & SonarQube"
 
-on: 
+on:
   pull_request:
     branches:
       - main
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   sonar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci
-      - run: npm test
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run tests (with reports)
+        run: npm test
+
+      - name: Show produced reports (debug)
+        run: |
+          echo "JUnit files:" && ls -lah reports/junit || true
+          echo "Coverage files:" && ls -lah reports/coverage || true
+          if [ -f reports/junit/jest-junit.xml ]; then head -n 40 reports/junit/jest-junit.xml; fi
+
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2
-        permissions:
-          contents: read
-          id-token: write
-        secrets: inherit
-        with:
-          args: >
-            -Dsonar.projectKey=GingaDev_contacts-demo
-            -Dsonar.sources=.
-            -Dsonar.testExecutionReportPaths=reports/junit/jest-junit.xml
-            -Dsonar.javascript.lcov.reportPaths=reports/coverage/lcov.info
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >-
+            -Dsonar.projectKey=GingaDev_contacts-demo
+            -Dsonar.projectName=gingadev
+            -Dsonar.sources=.
+            -Dsonar.tests=__tests__
+            -Dsonar.exclusions=node_modules/**,reports/**
+            -Dsonar.junit.reportPaths=reports/junit/jest-junit.xml
+            -Dsonar.javascript.lcov.reportPaths=reports/coverage/lcov.info
