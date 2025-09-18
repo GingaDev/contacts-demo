@@ -1,0 +1,28 @@
+Name: Run Unit Tests and SonarQube Scan
+
+on: 
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=GingaDev_contacts-demo
+            -Dsonar.sources=.
+            -Dsonar.testExecutionReportPaths=reports/junit/jest-junit.xml
+            -Dsonar.javascript.lcov.reportPaths=reports/coverage/lcov.info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
