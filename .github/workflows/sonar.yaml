@@ -18,6 +18,10 @@ jobs:
       - run: npm test
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
+        permissions:
+          contents: read
+          id-token: write
+        secrets: inherit
         with:
           args: >
             -Dsonar.projectKey=GingaDev_contacts-demo
