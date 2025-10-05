@@ -560,6 +560,22 @@ app.post('/api/contacts/:id/dislike', requireAuth, (req, res) => {
     });
 });
 
+// ================================
+// ROTA HEALTHCHECK
+// ================================
+app.get('/health', (req, res) => {
+  db.get('SELECT id FROM users LIMIT 1', [], (err, row) => {
+    if (err) {
+      return res.status(500).json({ status: 'error', dbReady: false, userFound: false });
+    }
+    if (row) {
+      return res.status(200).json({ status: 'ok', dbReady: true, userFound: true });
+    } else {
+      return res.status(200).json({ status: 'ok', dbReady: true, userFound: false });
+    }
+  });
+});
+
 // Iniciar servidor
 if (require.main === module) {
   const server = app.listen(PORT, () => {

@@ -1,0 +1,43 @@
+name: Run Cypress Tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Sobe o servidor e roda Cypress
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start                  # comando para iniciar seu backend
+          wait-on: 'http://localhost:3000'  # espere até o servidor responder
+          wait-on-timeout: 120              # tempo máximo de espera (2 min)
+          browser: chrome                   # navegador usado (chrome/electron/firefox)
+          command: npx cypress run          # executa os testes Cypress
+
+      # Salva vídeos e screenshots se os testes falharem
+      - name: Upload Cypress artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos
+            cypress/screenshots
