@@ -7,8 +7,10 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
+const helmet = require('helmet');
 
 const app = express();
+app.use(helmet());
 const PORT = process.env.PORT || 3000;
 
 // Configuração do middleware
