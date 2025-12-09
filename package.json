@@ -22,7 +22,7 @@
     "jest-junit": "^16.0.0",
     "jest-sonar": "^0.2.16",
     "jest-sonar-reporter": "^2.0.0",
-    "nodemon": "^3.0.1",
+    "nodemon": "^3.1.11",
     "supertest": "^7.1.4"
   }
   
